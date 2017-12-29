@@ -27,24 +27,39 @@
     color: $color-text-dark-gray;
     border: 2px solid $color-border-gray;
   }
-}
 
-.btn--primary {
-  align-self: center;
-  background-color: $color-primary-blue;
-  color: $color-white;
-  border: 2px solid transparent;
-  cursor: pointer;
-  width: 100%;
+  &--primary {
+    align-self: center;
+    background-color: $color-primary-blue;
+    color: $color-white;
+    border: 2px solid transparent;
+    cursor: pointer;
+    width: 100%;
 
-  &:hover,
-  &:focus {
-    background-color: $color-hover-green;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    &:hover,
+    &:focus {
+      background-color: $color-hover-green;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    }
+
+    &:active,
+    &:focus:active {
+      box-shadow: none;
+    }
   }
+  &--toggle {
+    background: $color-white;
+    border: 2px solid $color-border-gray;
+    margin: 1rem 0.5rem;
 
-  &:active,
-  &:focus:active {
-    box-shadow: none;
+    &.toggled {
+      background: $color-primary-blue;
+      color: $color-white;
+    }
+
+    &--complete {
+      margin: 1rem 0;
+      width: 18rem;
+    }
   }
 }

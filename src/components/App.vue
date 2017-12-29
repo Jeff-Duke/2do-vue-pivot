@@ -6,6 +6,20 @@
     />
 
     <section class="filter-sort-panel container">
+
+      <button
+        @click="toggleShowMore"
+        class="btn btn--toggle btn--toggle--complete"
+      >
+        {{ show === 10 ? "Show More Todos" : "Show Fewer Todos"}}
+      </button>
+
+      <button
+        @click="toggleShowComplete"
+        class="btn btn--toggle btn--toggle--complete"
+      >
+        {{ showCompleted ? "Hide Completed Todos" : "Show Completed Todos"}}
+      </button>
         <input
           v-model="filterTerm"
           class="input input--filter"
@@ -31,7 +45,7 @@
         <button
           @click="filterByImportance"
           :class="{toggled: importanceFilter === 5}"
-          class="btn btn--todo-filter"
+          class="btn btn--toggle"
           name="5"
           :disabled="!Boolean(todos.length)"
           >Critical
@@ -40,7 +54,7 @@
         <button
           @click="filterByImportance"
           :class="{toggled: importanceFilter === 4}"
-          class="btn btn--todo-filter"
+          class="btn btn--toggle"
           :disabled="!Boolean(todos.length)"
           name="4"
           >High
@@ -49,7 +63,7 @@
         <button
           @click="filterByImportance"
           :class="{toggled: importanceFilter === 3}"
-          class="btn btn--todo-filter"
+          class="btn btn--toggle"
           name="3"
           :disabled="!Boolean(todos.length)"
           >Normal
@@ -58,7 +72,7 @@
         <button
           @click="filterByImportance"
           :class="{toggled: importanceFilter === 2}"
-          class="btn btn--todo-filter"
+          class="btn btn--toggle"
           name="2"
           :disabled="!Boolean(todos.length)"
           >Low
@@ -67,18 +81,19 @@
         <button
           @click="filterByImportance"
           :class="{toggled: importanceFilter === 1}"
-          class="btn btn--todo-filter"
+          class="btn btn--toggle"
           name="1"
           :disabled="!Boolean(todos.length)"
           >None
 
         </button>
       </div>
+
     </section>
 
     <section class="todo-list container">
       <Todo
-        v-for="todo in filteredTodos"
+        v-for="todo in visibleTodos.slice(0,show)"
         :key="todo.id"
         :todo="todo"
         @deleteTodo="deleteTodo"
@@ -115,6 +130,8 @@ export default {
       sortBy: 'newest',
       sortedTodos: [],
       importanceFilter: null,
+      showCompleted: false,
+      show: 10,
     };
   },
 
@@ -137,6 +154,17 @@ export default {
       }
 
       return filteredTodos;
+    },
+
+    incompleteTodos() {
+      return this.filteredTodos.filter(todo => !todo.complete);
+    },
+
+    visibleTodos() {
+      if (this.showCompleted) {
+        return this.filteredTodos;
+      }
+      return this.incompleteTodos;
     },
   },
 
@@ -183,6 +211,14 @@ export default {
         this.importanceFilter = importance;
       }
     },
+
+    toggleShowComplete() {
+      this.showCompleted = !this.showCompleted;
+    },
+
+    toggleShowMore() {
+      this.show === 10 ? (this.show = this.visibleTodos.length) : (this.show = 10);
+    },
   },
 };
 </script>
@@ -221,19 +257,6 @@ body {
     margin: 1rem 0 1.5rem 0.75rem;
     padding: 0.25rem;
     padding-right: 2rem;
-  }
-
-  .importance-buttons {
-    .btn--todo-filter {
-      background: $color-white;
-      border: 2px solid $color-border-gray;
-      margin-left: 1rem;
-
-      &.toggled {
-        background: $color-primary-blue;
-        color: $color-white;
-      }
-    }
   }
 }
 </style>
