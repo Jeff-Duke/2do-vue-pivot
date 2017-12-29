@@ -40,18 +40,18 @@
     />
 
     <div>
-      <p class="todo__quality">Quality: <span class="todo__quality--text">{{ todoQuality }}</span></p>
+      <p class="todo__importance">Importance: <span class="todo__importance--text">{{ todoImportance }}</span></p>
 
       <button
         @click="upVote(todo)"
-        :disabled="quality === 3"
+        :disabled="importance === 5"
         class="btn btn__todo btn__todo--upvote"
         aria-label="upvote todo"
       />
 
       <button
         @click="downVote(todo)"
-        :disabled="quality === 1"
+        :disabled="importance === 1"
         class="btn btn__todo btn__todo--downvote"
         aria-label="downvote todo"
       />
@@ -75,31 +75,33 @@ export default {
     return {
       title: this.todo.title,
       task: this.todo.task,
-      quality: this.todo.quality,
+      importance: this.todo.importance,
       editing: false,
     };
   },
 
   computed: {
-    todoQuality() {
-      const qualityGate = {
-        1: 'swill',
-        2: 'plausible',
-        3: 'genius',
+    todoImportance() {
+      const importanceGate = {
+        1: 'none',
+        2: 'low',
+        3: 'normal',
+        4: 'high',
+        5: 'critical',
       };
 
-      return qualityGate[this.quality];
+      return importanceGate[this.importance];
     },
   },
 
   methods: {
     upVote() {
-      this.quality += 1;
+      this.importance += 1;
       this.updateTodo();
     },
 
     downVote() {
-      this.quality -= 1;
+      this.importance -= 1;
       this.updateTodo();
     },
 
@@ -109,12 +111,12 @@ export default {
 
     updateTodo() {
       const { id, created } = this.todo;
-      const { title, task, quality } = this;
+      const { title, task, importance } = this;
       const todo = {
         id,
         title,
         task,
-        quality,
+        importance,
         created,
       };
 
@@ -148,7 +150,7 @@ export default {
   padding: 1rem 0 3rem 0;
 
   .todo__title,
-  .todo__quality {
+  .todo__importance {
     font-family: $secondary-font;
     font-weight: 700;
     color: $color-text-dark-gray;
@@ -224,7 +226,7 @@ export default {
     }
   }
 
-  .todo__quality {
+  .todo__importance {
     margin: 1rem 0;
   }
 }

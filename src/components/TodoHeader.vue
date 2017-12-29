@@ -65,7 +65,7 @@ export default {
           id: Date.now(),
           title,
           task,
-          quality: 1,
+          importance: 3,
           created: Date.now(),
         };
 

@@ -21,8 +21,8 @@
         >
           <option value="newest" selected>Newest</option>
           <option value="oldest">Oldest</option>
-          <option value="highest">Highest Quality</option>
-          <option value="lowest">Lowest Quality</option>
+          <option value="highest">Highest Importance</option>
+          <option value="lowest">Lowest Importance</option>
         </select>
       </label>
     </section>
@@ -48,8 +48,8 @@ import Todo from './Todo';
 const sorters = {
   newest: todos => todos.sort((a, b) => a.created < b.created),
   oldest: todos => todos.sort((a, b) => a.created > b.created),
-  highest: todos => todos.sort((a, b) => a.quality < b.quality),
-  lowest: todos => todos.sort((a, b) => a.quality > b.quality),
+  highest: todos => todos.sort((a, b) => a.importance < b.importance),
+  lowest: todos => todos.sort((a, b) => a.importance > b.importance),
 };
 
 export default {
