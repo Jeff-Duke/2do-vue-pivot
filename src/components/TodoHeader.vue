@@ -66,6 +66,7 @@ export default {
           title,
           task,
           importance: 3,
+          complete: false,
           created: Date.now(),
         };
 

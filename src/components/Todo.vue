@@ -5,6 +5,7 @@
       v-if="editing !==
       'todoTitle'"
       class="todo__title"
+      :class="{ complete: todo.complete }"
     >
       {{todo.title}}
     </h3>
@@ -27,6 +28,7 @@
       @dblclick="editTodo('todoTask')"
       v-if="editing !== 'todoTask'"
       class="todo__task"
+      :class="{ complete: todo.complete }"
     >
       {{todo.task}}
     </p>
@@ -40,7 +42,10 @@
     />
 
     <div>
-      <p class="todo__importance">Importance: <span class="todo__importance--text">{{ todoImportance }}</span></p>
+      <p
+        class="todo__importance"
+        :class="{ complete: todo.complete }"
+      >Importance: <span class="todo__importance--text">{{ todoImportance }}</span></p>
 
       <button
         @click="upVote(todo)"
@@ -56,6 +61,19 @@
         aria-label="downvote todo"
       />
     </div>
+    <label
+        class="todo__complete--label"
+      >
+        <span class="todo__complete--complete" v-if="todo.complete">Completed</span>
+        <span class="todo__complete--incomplete" v-if="!todo.complete">Incomplete</span>
+
+        <input
+          :checked="todo.complete"
+          type="checkbox"
+          @click="toggleTodoComplete"
+          class="todo__complete"
+        />
+      </label>
 
   </article>
 </template>
@@ -76,6 +94,7 @@ export default {
       title: this.todo.title,
       task: this.todo.task,
       importance: this.todo.importance,
+      complete: this.todo.complete,
       editing: false,
     };
   },
@@ -111,16 +130,22 @@ export default {
 
     updateTodo() {
       const { id, created } = this.todo;
-      const { title, task, importance } = this;
+      const { title, task, importance, complete } = this;
       const todo = {
         id,
         title,
         task,
         importance,
+        complete,
         created,
       };
 
       return this.$emit('updateTodo', todo);
+    },
+
+    toggleTodoComplete() {
+      this.complete = !this.complete;
+      this.updateTodo();
     },
 
     editTodo(ref) {
@@ -163,6 +188,7 @@ export default {
 
   .todo__title {
     font-size: 1.5rem;
+    display: inline-block;
   }
 
   .todo__task {
@@ -228,6 +254,15 @@ export default {
 
   .todo__importance {
     margin: 1rem 0;
+
+    &.complete {
+      visibility: hidden;
+    }
+  }
+
+  .complete {
+    color: $color-body-gray;
+    text-decoration: line-through;
   }
 }
 </style>

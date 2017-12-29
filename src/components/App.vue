@@ -25,6 +25,55 @@
           <option value="lowest">Lowest Importance</option>
         </select>
       </label>
+
+      <div class="importance-buttons">
+        <label>Show Only: </label>
+        <button
+          @click="filterByImportance"
+          :class="{toggled: importanceFilter === 5}"
+          class="btn btn--todo-filter"
+          name="5"
+          :disabled="!Boolean(todos.length)"
+          >Critical
+
+        </button>
+        <button
+          @click="filterByImportance"
+          :class="{toggled: importanceFilter === 4}"
+          class="btn btn--todo-filter"
+          :disabled="!Boolean(todos.length)"
+          name="4"
+          >High
+
+        </button>
+        <button
+          @click="filterByImportance"
+          :class="{toggled: importanceFilter === 3}"
+          class="btn btn--todo-filter"
+          name="3"
+          :disabled="!Boolean(todos.length)"
+          >Normal
+
+        </button>
+        <button
+          @click="filterByImportance"
+          :class="{toggled: importanceFilter === 2}"
+          class="btn btn--todo-filter"
+          name="2"
+          :disabled="!Boolean(todos.length)"
+          >Low
+
+        </button>
+        <button
+          @click="filterByImportance"
+          :class="{toggled: importanceFilter === 1}"
+          class="btn btn--todo-filter"
+          name="1"
+          :disabled="!Boolean(todos.length)"
+          >None
+
+        </button>
+      </div>
     </section>
 
     <section class="todo-list container">
@@ -65,6 +114,7 @@ export default {
       filterTerm: '',
       sortBy: 'newest',
       sortedTodos: [],
+      importanceFilter: null,
     };
   },
 
@@ -75,11 +125,18 @@ export default {
 
   computed: {
     filteredTodos() {
-      return this.sortedTodos.filter(
-        todo =>
-          todo.title.toLowerCase().includes(this.filterTerm.toLowerCase()) ||
-          todo.task.toLowerCase().includes(this.filterTerm.toLowerCase()),
+      const filter = this.filterTerm.toLowerCase();
+      let filteredTodos = this.sortedTodos.filter(todo =>
+        `${todo.title} ${todo.task}`.toLowerCase().includes(filter),
       );
+
+      if (this.importanceFilter) {
+        const importance = parseInt(this.importanceFilter, 10);
+
+        filteredTodos = filteredTodos.filter(todo => todo.importance === importance);
+      }
+
+      return filteredTodos;
     },
   },
 
@@ -116,6 +173,15 @@ export default {
     sortTodos() {
       const sortedTodos = sorters[this.sortBy](this.todos);
       this.sortedTodos = sortedTodos;
+    },
+
+    filterByImportance(event) {
+      const importance = parseInt(event.target.name, 10);
+      if (this.importanceFilter && this.importanceFilter === importance) {
+        this.importanceFilter = null;
+      } else {
+        this.importanceFilter = importance;
+      }
     },
   },
 };
@@ -155,6 +221,19 @@ body {
     margin: 1rem 0 1.5rem 0.75rem;
     padding: 0.25rem;
     padding-right: 2rem;
+  }
+
+  .importance-buttons {
+    .btn--todo-filter {
+      background: $color-white;
+      border: 2px solid $color-border-gray;
+      margin-left: 1rem;
+
+      &.toggled {
+        background: $color-primary-blue;
+        color: $color-white;
+      }
+    }
   }
 }
 </style>
