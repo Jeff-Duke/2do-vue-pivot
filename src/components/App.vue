@@ -1,8 +1,8 @@
 <template>
 
   <main>
-    <IdeaHeader
-      @addIdea="addIdea"
+    <TodoHeader
+      @addTodo="addTodo"
     />
 
     <section class="filter-sort-panel container">
@@ -17,7 +17,7 @@
         <select
         v-model="sortBy"
         class="select select--sort"
-        @change="sortIdeas"
+        @change="sortTodos"
         >
           <option value="newest" selected>Newest</option>
           <option value="oldest">Oldest</option>
@@ -27,13 +27,13 @@
       </label>
     </section>
 
-    <section class="idea-list container">
-      <Idea
-        v-for="idea in filteredIdeas"
-        :key="idea.id"
-        :idea="idea"
-        @deleteIdea="deleteIdea"
-        @updateIdea="updateIdea"
+    <section class="todo-list container">
+      <Todo
+        v-for="todo in filteredTodos"
+        :key="todo.id"
+        :todo="todo"
+        @deleteTodo="deleteTodo"
+        @updateTodo="updateTodo"
       />
 
     </section>
@@ -42,80 +42,80 @@
 </template>
 
 <script>
-import IdeaHeader from './IdeaHeader';
-import Idea from './Idea';
+import TodoHeader from './TodoHeader';
+import Todo from './Todo';
 
 const sorters = {
-  newest: ideas => ideas.sort((a, b) => a.created < b.created),
-  oldest: ideas => ideas.sort((a, b) => a.created > b.created),
-  highest: ideas => ideas.sort((a, b) => a.quality < b.quality),
-  lowest: ideas => ideas.sort((a, b) => a.quality > b.quality),
+  newest: todos => todos.sort((a, b) => a.created < b.created),
+  oldest: todos => todos.sort((a, b) => a.created > b.created),
+  highest: todos => todos.sort((a, b) => a.quality < b.quality),
+  lowest: todos => todos.sort((a, b) => a.quality > b.quality),
 };
 
 export default {
   name: 'App',
   components: {
-    IdeaHeader,
-    Idea,
+    TodoHeader,
+    Todo,
   },
 
   data() {
     return {
-      ideas: [],
+      todos: [],
       searchTerm: '',
       sortBy: 'newest',
-      sortedIdeas: [],
+      sortedTodos: [],
     };
   },
 
   mounted() {
-    this.loadStoredIdeas();
-    this.sortIdeas();
+    this.loadStoredTodos();
+    this.sortTodos();
   },
 
   computed: {
-    filteredIdeas() {
-      return this.sortedIdeas.filter(
-        idea =>
-          idea.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-          idea.body.toLowerCase().includes(this.searchTerm.toLowerCase()),
+    filteredTodos() {
+      return this.sortedTodos.filter(
+        todo =>
+          todo.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          todo.task.toLowerCase().includes(this.searchTerm.toLowerCase()),
       );
     },
   },
 
   methods: {
-    addIdea(idea) {
-      this.ideas.unshift(idea);
-      this.storeIdeas();
+    addTodo(todo) {
+      this.todos.unshift(todo);
+      this.storeTodos();
     },
 
-    updateIdea(idea) {
-      const index = this.ideas.findIndex(storedIdea => storedIdea.id === idea.id);
-      this.ideas[index] = idea;
+    updateTodo(todo) {
+      const index = this.todos.findIndex(storedTodo => storedTodo.id === todo.id);
+      this.todos[index] = todo;
 
-      this.storeIdeas();
-      this.sortIdeas();
+      this.storeTodos();
+      this.sortTodos();
     },
 
-    deleteIdea(ideaID) {
-      const id = parseInt(ideaID, 10);
+    deleteTodo(todoID) {
+      const id = parseInt(todoID, 10);
 
-      this.ideas = this.ideas.filter(idea => idea.id !== id);
-      this.storeIdeas();
-      this.sortIdeas();
+      this.todos = this.todos.filter(todo => todo.id !== id);
+      this.storeTodos();
+      this.sortTodos();
     },
 
-    storeIdeas() {
-      localStorage.setItem('ideas', JSON.stringify(this.ideas));
+    storeTodos() {
+      localStorage.setItem('todos', JSON.stringify(this.todos));
     },
 
-    loadStoredIdeas() {
-      this.ideas = JSON.parse(localStorage.getItem('ideas')) || [];
+    loadStoredTodos() {
+      this.todos = JSON.parse(localStorage.getItem('todos')) || [];
     },
 
-    sortIdeas() {
-      const sortedIdeas = sorters[this.sortBy](this.ideas);
-      this.sortedIdeas = sortedIdeas;
+    sortTodos() {
+      const sortedTodos = sorters[this.sortBy](this.todos);
+      this.sortedTodos = sortedTodos;
     },
   },
 };
