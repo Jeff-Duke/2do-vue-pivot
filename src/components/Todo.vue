@@ -1,59 +1,59 @@
 <template>
-  <article class="idea-card">
+  <article class="todo-card">
     <h3
-      @dblclick="editIdea('ideaTitle')"
+      @dblclick="editTodo('todoTitle')"
       v-if="editing !==
-      'ideaTitle'"
-      class="idea__title"
+      'todoTitle'"
+      class="todo__title"
     >
-      {{idea.title}}
+      {{todo.title}}
     </h3>
 
     <input class="edit edit__title" type="text"
       v-model="title"
-      v-if="editing === 'ideaTitle'"
+      v-if="editing === 'todoTitle'"
       @blur="doneEditing"
       @keyup.enter="doneEditing"
-      ref="ideaTitle"
+      ref="todoTitle"
     />
 
     <button
-      @click="deleteIdea"
-      class="btn__idea btn__idea--delete"
-      aria-label="delete idea"
+      @click="deleteTodo"
+      class="btn__todo btn__todo--delete"
+      aria-label="delete todo"
     />
 
     <p
-      @dblclick="editIdea('ideaBody')"
-      v-if="editing !== 'ideaBody'"
-      class="idea__body"
+      @dblclick="editTodo('todoTask')"
+      v-if="editing !== 'todoTask'"
+      class="todo__task"
     >
-      {{idea.body}}
+      {{todo.task}}
     </p>
 
-    <textarea class="edit edit__body" type="text"
-      v-model="body"
-      v-if="editing === 'ideaBody'"
+    <textarea class="edit edit__task" type="text"
+      v-model="task"
+      v-if="editing === 'todoTask'"
       @blur="doneEditing"
       @keyup.enter="doneEditing"
-      ref="ideaBody"
+      ref="todoTask"
     />
 
     <div>
-      <p class="idea__quality">Quality: <span class="idea__quality--text">{{ ideaQuality }}</span></p>
+      <p class="todo__quality">Quality: <span class="todo__quality--text">{{ todoQuality }}</span></p>
 
       <button
-        @click="upVote(idea)"
+        @click="upVote(todo)"
         :disabled="quality === 3"
-        class="btn btn__idea btn__idea--upvote"
-        aria-label="upvote idea"
+        class="btn btn__todo btn__todo--upvote"
+        aria-label="upvote todo"
       />
 
       <button
-        @click="downVote(idea)"
+        @click="downVote(todo)"
         :disabled="quality === 1"
-        class="btn btn__idea btn__idea--downvote"
-        aria-label="downvote idea"
+        class="btn btn__todo btn__todo--downvote"
+        aria-label="downvote todo"
       />
     </div>
 
@@ -62,21 +62,26 @@
 
 <script>
 export default {
-  name: 'Idea',
+  name: 'Todo',
 
-  props: ['idea'],
+  props: {
+    todo: {
+      type: Object,
+      required: true,
+    },
+  },
 
   data() {
     return {
-      title: this.idea.title,
-      body: this.idea.body,
-      quality: this.idea.quality,
+      title: this.todo.title,
+      task: this.todo.task,
+      quality: this.todo.quality,
       editing: false,
     };
   },
 
   computed: {
-    ideaQuality() {
+    todoQuality() {
       const qualityGate = {
         1: 'swill',
         2: 'plausible',
@@ -90,33 +95,33 @@ export default {
   methods: {
     upVote() {
       this.quality += 1;
-      this.updateIdea();
+      this.updateTodo();
     },
 
     downVote() {
       this.quality -= 1;
-      this.updateIdea();
+      this.updateTodo();
     },
 
-    deleteIdea() {
-      return this.$emit('deleteIdea', this.idea.id);
+    deleteTodo() {
+      return this.$emit('deleteTodo', this.todo.id);
     },
 
-    updateIdea() {
-      const { id, created } = this.idea;
-      const { title, body, quality } = this;
-      const idea = {
+    updateTodo() {
+      const { id, created } = this.todo;
+      const { title, task, quality } = this;
+      const todo = {
         id,
         title,
-        body,
+        task,
         quality,
         created,
       };
 
-      return this.$emit('updateIdea', idea);
+      return this.$emit('updateTodo', todo);
     },
 
-    editIdea(ref) {
+    editTodo(ref) {
       this.editing = ref;
       this.$nextTick(() => {
         this.$refs[ref].focus();
@@ -125,7 +130,7 @@ export default {
 
     doneEditing() {
       this.editing = false;
-      this.updateIdea();
+      this.updateTodo();
     },
   },
 };
@@ -134,7 +139,7 @@ export default {
 <style lang="scss">
 @import '../styles/_mixins_vars.scss';
 
-.idea-card {
+.todo-card {
   border-bottom: 1px solid $color-border-gray;
   color: $color-text-dark-gray;
   font-family: $primary-font;
@@ -142,23 +147,23 @@ export default {
   margin: 1rem 0;
   padding: 1rem 0 3rem 0;
 
-  .idea__title,
-  .idea__quality {
+  .todo__title,
+  .todo__quality {
     font-family: $secondary-font;
     font-weight: 700;
     color: $color-text-dark-gray;
   }
 
-  .idea__title,
-  .idea__body {
+  .todo__title,
+  .todo__task {
     margin-bottom: 1rem;
   }
 
-  .idea__title {
+  .todo__title {
     font-size: 1.5rem;
   }
 
-  .idea__body {
+  .todo__task {
     line-height: 1.5rem;
     width: 85%;
   }
@@ -172,17 +177,17 @@ export default {
     padding: 0.5rem;
 
     &__title,
-    &__body {
+    &__task {
       width: 85%;
     }
 
-    &__body {
+    &__task {
       resize: none;
       height: 6rem;
     }
   }
 
-  .btn__idea {
+  .btn__todo {
     border: none;
     background-color: transparent;
     cursor: pointer;
@@ -219,7 +224,7 @@ export default {
     }
   }
 
-  .idea__quality {
+  .todo__quality {
     margin: 1rem 0;
   }
 }

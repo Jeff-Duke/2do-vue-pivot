@@ -1,8 +1,8 @@
 <template>
-  <header class="idea-header">
+  <header class="todo__header">
 
-    <h1 class="header">idea
-      <span class="title-gray">box</span>
+    <h1 class="header">2do
+      <span class="title">box</span>
     </h1>
 
     <section class="inputs container">
@@ -16,16 +16,16 @@
         />
 
         <textarea
-          v-model="body"
-          class="input input--body"
-          @keyup.enter="createIdea"
-          placeholder="Body"
+          v-model="task"
+          class="input input--task"
+          @keyup.enter="createTodo"
+          placeholder="Task"
           type="text"
-          aria-label="body"
+          aria-label="task"
         />
 
       <button
-      @click="createIdea"
+      @click="createTodo"
       :disabled="!isEnabled"
       class="btn btn--primary"
       >
@@ -38,12 +38,12 @@
 
 <script>
 export default {
-  name: 'IdeaHeader',
+  name: 'TodoHeader',
 
   data() {
     return {
       title: '',
-      body: '',
+      task: '',
     };
   },
 
@@ -53,32 +53,32 @@ export default {
 
   computed: {
     isEnabled() {
-      return Boolean(this.title) && Boolean(this.body);
+      return Boolean(this.title) && Boolean(this.task);
     },
   },
 
   methods: {
-    createIdea() {
-      const { title, body } = this;
+    createTodo() {
+      const { title, task } = this;
       if (this.isEnabled) {
-        const idea = {
+        const todo = {
           id: Date.now(),
           title,
-          body,
+          task,
           quality: 1,
           created: Date.now(),
         };
 
         this.$refs.titleInput.focus();
         this.clearInputs();
-        this.$emit('addIdea', idea);
+        this.$emit('addTodo', todo);
       }
       return null;
     },
 
     clearInputs() {
       this.title = '';
-      this.body = '';
+      this.task = '';
     },
   },
 };
@@ -88,7 +88,7 @@ export default {
 @import '../styles/_mixins_vars.scss';
 @import '../styles/_buttons_inputs.scss';
 
-.idea-header {
+.todo__header {
   background-color: $color-background;
   display: flex;
   flex-direction: column;
@@ -98,12 +98,13 @@ export default {
 
   .header {
     font-family: $secondary-font;
-    color: $color-primary-blue;
+    color: $color-body-gray;
     font-size: 3rem;
     margin-bottom: 2rem;
 
-    .title-gray {
-      color: $color-text-dark-gray;
+    .title {
+      color: $color-white;
+      margin-left: -0.75rem;
     }
 
     @media screen and (max-width: 480px) {
