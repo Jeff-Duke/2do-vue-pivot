@@ -1,10 +1,10 @@
-# vuedea box
+# vue2do box
 
-> A place for storing your ideas
+> A place for storing your todos
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 

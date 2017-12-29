@@ -1,7 +1,7 @@
 {
   "name": "y",
   "version": "1.0.0",
-  "description": "A place for storing your ideas",
+  "description": "A place for storing your todos",
   "author": "Jeff Duke <jeff.duke@gmail.com>",
   "private": true,
   "scripts": {
