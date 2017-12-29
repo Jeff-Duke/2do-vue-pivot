@@ -7,10 +7,10 @@
 
     <section class="filter-sort-panel container">
         <input
-          v-model="searchTerm"
-          class="input input--search"
-          placeholder="Search"
-          aria-label="Search"
+          v-model="filterTerm"
+          class="input input--filter"
+          placeholder="Filter"
+          aria-label="Filter"
         />
 
       <label for="sort">Sort By:
@@ -62,7 +62,7 @@ export default {
   data() {
     return {
       todos: [],
-      searchTerm: '',
+      filterTerm: '',
       sortBy: 'newest',
       sortedTodos: [],
     };
@@ -77,8 +77,8 @@ export default {
     filteredTodos() {
       return this.sortedTodos.filter(
         todo =>
-          todo.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-          todo.task.toLowerCase().includes(this.searchTerm.toLowerCase()),
+          todo.title.toLowerCase().includes(this.filterTerm.toLowerCase()) ||
+          todo.task.toLowerCase().includes(this.filterTerm.toLowerCase()),
       );
     },
   },
