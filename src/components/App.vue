@@ -258,5 +258,18 @@ body {
     padding: 0.25rem;
     padding-right: 2rem;
   }
+
+  @media screen and(max-width: 480px) {
+    .importance-buttons {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-between;
+
+      .btn--toggle {
+        width: 45%;
+        margin: 0.5rem 0;
+      }
+    }
+  }
 }
 </style>
