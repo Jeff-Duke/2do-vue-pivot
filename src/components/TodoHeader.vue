@@ -23,6 +23,7 @@
           type="text"
           aria-label="task"
         />
+        <span class="input__character-counter">{{`${charactersLeft}/120`}}</span>
 
       <button
       @click="createTodo"
@@ -32,7 +33,7 @@
         Save
       </button>
     </section>
-
+    <p v-show="error" class="input--error">{{error}}</p>
   </header>
 </template>
 
@@ -44,6 +45,7 @@ export default {
     return {
       title: '',
       task: '',
+      error: '',
     };
   },
 
@@ -53,12 +55,18 @@ export default {
 
   computed: {
     isEnabled() {
-      return Boolean(this.title) && Boolean(this.task);
+      return Boolean(this.title) && Boolean(this.task) && Boolean(this.charactersLeft >= 0);
+    },
+
+    charactersLeft() {
+      return 120 - this.task.length;
     },
   },
 
   methods: {
     createTodo() {
+      this.error = '';
+
       const { title, task } = this;
       if (this.isEnabled) {
         const todo = {
@@ -73,6 +81,8 @@ export default {
         this.$refs.titleInput.focus();
         this.clearInputs();
         this.$emit('addTodo', todo);
+      } else {
+        return (this.error = 'We were unable to submit that todo');
       }
       return null;
     },
@@ -117,6 +127,22 @@ export default {
   .inputs {
     display: flex;
     flex-direction: column;
+  }
+
+  .input--task {
+    margin-bottom: 0;
+  }
+
+  .input__character-counter {
+    color: $color-white;
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+  }
+
+  .input--error {
+    color: $color-white;
+    font-size: 1.25rem;
+    margin-top: 1rem;
   }
 
   @media screen and (max-width: 480px) {
