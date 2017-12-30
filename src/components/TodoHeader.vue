@@ -23,7 +23,11 @@
           type="text"
           aria-label="task"
         />
-        <span class="input__character-counter">{{`${charactersLeft}/120`}}</span>
+        <span
+          class="input__character-counter"
+        >
+          {{`${charactersLeft}/120`}}
+        </span>
 
       <button
       @click="createTodo"
