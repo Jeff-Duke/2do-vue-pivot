@@ -86,7 +86,7 @@ export default {
         this.clearInputs();
         this.$emit('addTodo', todo);
       } else {
-        return (this.error = 'We were unable to submit that todo');
+        this.error = 'We were unable to submit that todo';
       }
       return null;
     },
